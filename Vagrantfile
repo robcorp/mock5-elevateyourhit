@@ -78,5 +78,7 @@ Vagrant.configure("2") do |config|
     apt-get upgrade -y
     apt-get install -y apache2 lynx libapache2-mod-jk openjdk-8-jdk-headless tomcat7 tomcat7-admin
     apt-get autoremove -y
+    cp /vagrant/config/tomcat/tomcat-users.xml /var/lib/tomcat7/conf/
+    service tomcat7 restart
   SHELL
 end
