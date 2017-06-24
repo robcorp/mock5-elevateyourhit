@@ -78,6 +78,9 @@ Vagrant.configure("2") do |config|
     apt-get upgrade -y
     apt-get install -y apache2 lynx libapache2-mod-jk openjdk-8-jdk-headless tomcat7 tomcat7-admin
     apt-get autoremove -y
+    mkdir -p /var/www/www.elevateyourhit.com
+    echo "www.elevateyourhit.com" > /var/www/www.elevateyourhit.com/index.html
+    cp /vagrant/config/apache2/elevateyourhit-vhost.conf /etc/apache2/sites-enabled/
     cp /vagrant/config/tomcat/tomcat-users.xml /var/lib/tomcat7/conf/
     service tomcat7 restart
   SHELL
