@@ -1,0 +1,36 @@
+---
+# These tasks install OpenJDK 8, Tomcat 7 and the Tomcat Admin apps
+
+- name: Install JDK 8
+  apt: name=openjdk-8-jdk-headless state=present
+
+- name: Install Tomcat 7
+  apt: name="tomcat7" state=present
+
+- name: Install Tomcat Admin app
+  apt: name=tomcat7-admin state=present
+
+#- name: add group "tomcat7"
+#  group: name=tomcat7
+
+#- name: add user "tomcat7"
+#  user: name=tomcat group=tomcat home=/usr/share/tomcat createhome=no
+#  become: True
+#  become_method: sudo
+
+#- name: Change ownership of Tomcat installation
+#  file: path=/usr/share/tomcat/ owner=tomcat7 group=tomcat7 state=directory recurse=yes
+
+#- name: Configure Tomcat server
+#  template: src=server.xml dest=/etc/tomcat7/
+#  notify: restart tomcat
+
+- name: Configure Tomcat users
+  template: src=tomcat-users.xml dest=/etc/tomcat7/
+  notify: restart tomcat
+
+- name: Start Tomcat
+  service: name=tomcat7 state=started enabled=yes
+
+- name: wait for tomcat to start
+  wait_for: port={{http_port}}

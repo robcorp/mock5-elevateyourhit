@@ -45,8 +45,8 @@ Vagrant.configure("2") do |config|
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
-  config.vm.synced_folder "html", "/var/www/html"
-  config.vm.synced_folder "webapps/hit", "/var/lib/tomcat7/webapps/hit"
+  #config.vm.synced_folder "html", "/var/www/html"
+  #config.vm.synced_folder "webapps/hit", "/var/lib/tomcat7/webapps/hit"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -74,16 +74,23 @@ Vagrant.configure("2") do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
-    apt-get update
-    apt-get upgrade -y
-    apt-get install -y apache2 lynx openjdk-8-jdk-headless tomcat7 tomcat7-admin
+    #apt-get update
+    #apt-get upgrade -y
+    apt-get install -y python # needed for Ansible
+    #apt-get install -y apache2 lynx openjdk-8-jdk-headless tomcat7 tomcat7-admin
     apt-get autoremove -y
-    mkdir -p /var/www/www.elevateyourhit.com
-    cp /vagrant/config/apache2/elevateyourhit-vhost.conf /etc/apache2/sites-enabled/
-    cp /vagrant/config/apache2/index.html /var/www/www.elevateyourhit.com/index.html
-    a2enmod proxy proxy_http proxy_balancer lbmethod_byrequests
-    service apache2 restart
-    cp /vagrant/config/tomcat/tomcat-users.xml /var/lib/tomcat7/conf/
-    service tomcat7 restart
+    #mkdir -p /var/www/www.elevateyourhit.com
+    #cp /vagrant/config/apache2/elevateyourhit-vhost.conf /etc/apache2/sites-enabled/
+    #cp /vagrant/config/apache2/index.html /var/www/www.elevateyourhit.com/index.html
+    #a2enmod proxy proxy_http proxy_balancer lbmethod_byrequests
+    #service apache2 restart
+    #cp /vagrant/config/tomcat/tomcat-users.xml /var/lib/tomcat7/conf/
+    #service tomcat7 restart
   SHELL
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.inventory_path = "config/ansible/inventory"
+    ansible.playbook = "config/ansible/playbook.yml"
+    ansible.limit = "dev-webservers"
+  end
 end
