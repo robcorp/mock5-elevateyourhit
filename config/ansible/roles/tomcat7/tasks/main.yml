@@ -29,6 +29,19 @@
   template: src=tomcat-users.xml dest=/etc/tomcat7/
   notify: restart tomcat
 
+- name: Copy files for the context "/hit" to /var/sftp/mock5FTP/hit/
+  copy:
+    src: files/hit/
+    dest: /var/sftp/mock5FTP/hit/
+    owner: mock5FTP
+    group: mock5FTP
+
+- name: Link /var/lib/tomcat7/hit /var/sftp/mock5FTP/hit
+  file:
+    src: /var/sftp/mock5FTP/hit
+    dest: /var/lib/tomcat7/webapps/hit
+    state: link
+
 - name: Start Tomcat
   service: name=tomcat7 state=started enabled=yes
 

@@ -1,5 +1,5 @@
 ---
-# These tasks install apache2 and the proxy modules.
+# These tasks install apache2 and the proxy modules and set up the www.elevateyourhit.com site vhost.
 
 - name: Install apache2 and lynx
   apt: name={{ item }} state=present
@@ -16,8 +16,18 @@
     - lbmethod_byrequests
   notify: restart apache2
 
-- name: Copy index.html for www.elevateyourhit.com to /var/www/www.elevateyourhit.com/
-  copy: src=files/index.html dest=/var/www/www.elevateyourhit.com/
+- name: Copy index.html for www.elevateyourhit.com to /var/sftp/mock5FTP/www.elevateyourhit.com/
+  copy:
+    src: files/index.html
+    dest: /var/sftp/mock5FTP/www.elevateyourhit.com/
+    owner: mock5FTP
+    group: mock5FTP
+
+- name: Link /var/www/www.elevateyourhit.com to /var/sftp/mock5FTP/www.elevateyourhit.com
+  file:
+    src: /var/sftp/mock5FTP/www.elevateyourhit.com
+    dest: /var/www/www.elevateyourhit.com
+    state: link
 
 - name: Copy elevateyourhit-vhost.conf to sites-enabled dir
   copy: src=files/elevateyourhit-vhost.conf dest=/etc/apache2/sites-enabled/
