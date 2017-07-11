@@ -1,1 +1,45 @@
----# These tasks create the mock5FTP user and directories it uses as well as configuring SFTP for this user.- name: Create mock5FTP user  user:     name: mock5FTP     password: $6$A//SD0na$bpk/O5x74DkAeqSP5N.8AgWxEoCYz0pBbG36wbgJF0/yeTnRZiIvZe3ZOojhRXZ3oy9xv1hCCbWsHLaLCulZg0     shell: /bin/bash- name: Create /var/sftp/mock5FTP directory  file:     path: /var/sftp/mock5FTP    state: directory    mode: 0755- name: Create /var/sftp/mock5FTP/www.elevateyourhit.com directory  file:     path: /var/sftp/mock5FTP/www.elevateyourhit.com    state: directory    mode: 0755    owner: mock5FTP    group: mock5FTP- name: Create /var/sftp/mock5FTP/hit directory for Tomcat context /hit  file:     path: /var/sftp/mock5FTP/hit    state: directory    mode: 0755    owner: mock5FTP    group: mock5FTP- name: Configure sshd for user mock5FTP  blockinfile:    path: /etc/ssh/sshd_config    block: |      ## Set up sftp for mock5FTP user      Match User mock5FTP      ForceCommand internal-sftp      PasswordAuthentication yes      ChrootDirectory /var/sftp/mock5FTP      PermitTunnel no      AllowAgentForwarding no      AllowTcpForwarding no      X11Forwarding no- name: Restart sshd  service: name=sshd state=restarted  
+---
+# These tasks create the mock5FTP user and directories it uses as well as configuring SFTP for this user.
+
+- name: Create mock5FTP user
+  user: 
+    name: mock5FTP 
+    password: $6$A//SD0na$bpk/O5x74DkAeqSP5N.8AgWxEoCYz0pBbG36wbgJF0/yeTnRZiIvZe3ZOojhRXZ3oy9xv1hCCbWsHLaLCulZg0 
+    shell: /bin/bash
+
+- name: Create /var/sftp/mock5FTP directory
+  file: 
+    path: /var/sftp/mock5FTP
+    state: directory
+    mode: 0755
+
+- name: Create /var/sftp/mock5FTP/www.elevateyourhit.com directory
+  file: 
+    path: /var/sftp/mock5FTP/www.elevateyourhit.com
+    state: directory
+    mode: 0755
+    owner: mock5FTP
+    group: mock5FTP
+
+- name: Create /var/sftp/mock5FTP/hit directory for Tomcat context /hit
+  file: 
+    path: /var/sftp/mock5FTP/hit
+    state: directory
+    mode: 0755
+    owner: mock5FTP
+    group: mock5FTP
+
+- name: Configure sshd for user mock5FTP
+  blockinfile:
+    path: /etc/ssh/sshd_config
+    block: |
+      ## Set up sftp for mock5FTP user
+      Match User mock5FTP
+      ForceCommand internal-sftp
+      PasswordAuthentication yes
+      ChrootDirectory /var/sftp/mock5FTP
+      PermitTunnel no
+      AllowAgentForwarding no
+      AllowTcpForwarding no
+      X11Forwarding no
+  notify: restart sshd
