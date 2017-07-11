@@ -74,18 +74,8 @@ Vagrant.configure("2") do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
-    #apt-get update
-    #apt-get upgrade -y
     apt-get install -y python # needed for Ansible
-    #apt-get install -y apache2 lynx openjdk-8-jdk-headless tomcat7 tomcat7-admin
     apt-get autoremove -y
-    #mkdir -p /var/www/www.elevateyourhit.com
-    #cp /vagrant/config/apache2/elevateyourhit-vhost.conf /etc/apache2/sites-enabled/
-    #cp /vagrant/config/apache2/index.html /var/www/www.elevateyourhit.com/index.html
-    #a2enmod proxy proxy_http proxy_balancer lbmethod_byrequests
-    #service apache2 restart
-    #cp /vagrant/config/tomcat/tomcat-users.xml /var/lib/tomcat7/conf/
-    #service tomcat7 restart
   SHELL
 
   config.vm.provision "ansible" do |ansible|
