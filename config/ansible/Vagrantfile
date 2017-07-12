@@ -76,6 +76,6 @@ Vagrant.configure("2") do |config|
     apt-get update
     apt-get install -y ansible
     cp /vagrant/merck-prod-1.pem /home/ubuntu/.ssh/
-    chown ubuntu:ubuntu ~ubuntu/.ssh/merck-prod-1.pem
+    chown ubuntu:ubuntu /home/ubuntu/.ssh/merck-prod-1.pem
   SHELL
 end
