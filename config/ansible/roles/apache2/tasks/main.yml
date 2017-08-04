@@ -30,7 +30,7 @@
     state: link
 
 - name: Copy elevateyourhit-vhost.conf to sites-enabled dir
-  copy: src=files/elevateyourhit-vhost.conf dest=/etc/apache2/sites-enabled/
+  template: src=elevateyourhit-vhost.conf dest=/etc/apache2/sites-enabled/
   notify: restart apache2
 
 - name: Ensure httpd service is running and will run after reboot
